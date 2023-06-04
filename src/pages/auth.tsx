@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import Image from 'next/image';
 
 import logo from '../../public/images/logo.png';
-import { Input } from '@/components/Input';
+import { Input } from '@/components';
 
 const AuthHome = () => {
     const [email, setEmail] = useState('');
