@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-}
+    reactStrictMode: true,
+    eslint: {
+        // Activar ESLint durante el proceso de compilación
+        ignoreDuringBuilds: false,
+    },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
