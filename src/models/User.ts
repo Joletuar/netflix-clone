@@ -1,13 +1,14 @@
 import { IUserDB } from '@/interfaces';
-import { Schema, model, models, Types } from 'mongoose';
+import { Schema, model, models, Types, Model } from 'mongoose';
 
 const userSchema = new Schema<IUserDB>(
     {
         name: { type: String, required: true },
-        image: { type: String, required: true },
         email: {
             type: String,
+            required: true,
         },
+        image: { type: String },
 
         emailVerifiedDate: {
             type: String,
@@ -16,21 +17,18 @@ const userSchema = new Schema<IUserDB>(
         favoriteIds: [
             {
                 type: Types.ObjectId,
-                required: true,
             },
         ],
         session: [
             {
                 type: Types.ObjectId,
                 ref: 'Session',
-                required: true,
             },
         ],
         accounts: [
             {
                 type: Types.ObjectId,
                 ref: 'Account',
-                required: true,
             },
         ],
     },
@@ -39,4 +37,5 @@ const userSchema = new Schema<IUserDB>(
     }
 );
 
-export const User = models.User || model<IUserDB>('User', userSchema);
+export const User: Model<IUserDB> =
+    models.User || model<IUserDB>('User', userSchema);

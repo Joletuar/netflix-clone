@@ -1,5 +1,5 @@
 import { IAccountDB } from '@/interfaces';
-import { Schema, model, models } from 'mongoose';
+import { Schema, model, models, Model } from 'mongoose';
 
 const accountSchema = new Schema<IAccountDB>({
     userId: {
@@ -45,4 +45,5 @@ const accountSchema = new Schema<IAccountDB>({
 
 accountSchema.index({ provider: 1, providerAccountId: 1 }, { unique: true });
 
-export const Account = models.Account || model('Account', accountSchema);
+export const Account: Model<IAccountDB> =
+    models.Account || model('Account', accountSchema);

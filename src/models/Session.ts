@@ -1,5 +1,5 @@
 import { ISessionDB } from '@/interfaces';
-import { Schema, model, models } from 'mongoose';
+import { Model, Schema, model, models } from 'mongoose';
 
 const sessionSchema = new Schema<ISessionDB>({
     sessionToken: {
@@ -17,4 +17,5 @@ const sessionSchema = new Schema<ISessionDB>({
     },
 });
 
-export const Session = models.Session || model('Session', sessionSchema);
+export const Session: Model<ISessionDB> =
+    models.Session || model('Session', sessionSchema);

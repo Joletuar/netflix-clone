@@ -1,7 +1,6 @@
 import { Types } from 'mongoose';
 
 export interface IAccountDB {
-    _id: string;
     userId: Types.ObjectId;
     typeAccount: string;
     provider: string;

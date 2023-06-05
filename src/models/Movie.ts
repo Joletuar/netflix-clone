@@ -1,5 +1,5 @@
 import { IMovieDB } from '@/interfaces';
-import { Schema, model, models } from 'mongoose';
+import { Schema, model, models, Model } from 'mongoose';
 
 const movieSchema = new Schema<IMovieDB>({
     title: {
@@ -24,4 +24,5 @@ const movieSchema = new Schema<IMovieDB>({
     },
 });
 
-export const Movie = models.Movie || model('Movie', movieSchema);
+export const Movie: Model<IMovieDB> =
+    models.Movie || model('Movie', movieSchema);

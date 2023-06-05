@@ -1,8 +1,12 @@
 import { useCallback, useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import logo from '../../public/images/logo.png';
 import { Input } from '@/components';
+
+import axios from 'axios';
+import { signIn } from 'next-auth/react';
 
 const AuthHome = () => {
     const [email, setEmail] = useState('');
@@ -10,11 +14,49 @@ const AuthHome = () => {
     const [password, setPassword] = useState('');
     const [variant, setVariant] = useState('login');
 
+    const router = useRouter();
+
+    // Función que permite cambiar la variante
     const toggleVariant = useCallback(() => {
         setVariant((currentVariant) =>
             currentVariant === 'login' ? 'register' : 'login'
         );
     }, []);
+
+    // Función para realizar el login de un usario ya registrado
+    const handleLogin = useCallback(async () => {
+        try {
+            await signIn('credentials', {
+                email,
+                password,
+                callbackUrl: '/', // ruta a donde se redigirá si se logea correctamente, por defecto es la misma página
+                redirect: false, // al estar en false nextauth no redireccionará automaticamente
+            });
+
+            // Redirecionamos manualmente nosotros
+
+            router.push('/');
+        } catch (error) {
+            console.log(error);
+        }
+    }, [email, password, router]);
+
+    // Función para registrar un nuevo usuario
+    const handleRegister = useCallback(async () => {
+        try {
+            await axios.post('/api/user/register', {
+                email,
+                password,
+                username,
+            });
+
+            // Si el registro sale exitóso, logueamos
+
+            await handleLogin();
+        } catch (error) {
+            console.log(error);
+        }
+    }, [email, password, username, handleLogin]);
 
     return (
         <div className="relative h-full w-full bg-[url('../../public/images/hero.jpg')] bg-cover bg-no-repeat bg-center bg-fixed">
@@ -66,7 +108,14 @@ const AuthHome = () => {
                             />
                         </div>
 
-                        <button className='bg-red-600 py-3 text-white rounded-md block w-full mt-10 hover:bg-red-700 transition'>
+                        <button
+                            className='bg-red-600 py-3 text-white rounded-md block w-full mt-10 hover:bg-red-700 transition'
+                            onClick={
+                                variant === 'login'
+                                    ? handleLogin
+                                    : handleRegister
+                            }
+                        >
                             {variant === 'login' ? 'Ingresar' : 'Crear cuenta'}
                         </button>
 
