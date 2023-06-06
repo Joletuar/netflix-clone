@@ -39,7 +39,7 @@ export default NextAuth({
                     throw new Error('Email y password son requeridos');
                 }
 
-                // TODO: Refactorizar esto en modulos diferentes para no tener toda la lógica aquí
+                // TODO: Refactorizar esto para no tener toda la lógica aquí
 
                 // Conexión a BD y busqueda el usuario
 

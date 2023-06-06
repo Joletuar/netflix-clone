@@ -30,10 +30,6 @@ export const Input: FC<Props> = ({ id, onChange, value, type, label }) => {
     );
 };
 
-// peer-placeholder-shown: cual el placeholder el elemento con "peer" se ejecuta un código
-// peer-focus: cuando se hace focus sobre el elemento con "peer" se puede ejecutar algo
-
-/**
- className =
- 'absolute text-md text-zinc-400 duration-150 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-6 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-3 capitalize';
-*/
+// transform: cuando se pone esta utilidad se habilita todas las funciones de transform para usar
+// peer-placeholder-shown: cuando el placeholder el elemento con "peer" se muestra, se ejecuta un código
+// peer-focus: cuando cuando se hace focus sobre el elemento "peer", se ejecuta un código

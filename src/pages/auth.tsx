@@ -7,6 +7,8 @@ import { Input } from '@/components';
 
 import axios from 'axios';
 import { signIn } from 'next-auth/react';
+import { FcGoogle } from 'react-icons/fc';
+import { FaGithub } from 'react-icons/fa';
 
 const AuthHome = () => {
     const [email, setEmail] = useState('');
@@ -59,6 +61,8 @@ const AuthHome = () => {
     }, [email, password, username, handleLogin]);
 
     return (
+        // Main container with de image background
+
         <div className="relative h-full w-full bg-[url('../../public/images/hero.jpg')] bg-cover bg-no-repeat bg-center bg-fixed">
             <div className='w-full h-full lg:bg-opacity-50 bg-black'>
                 <nav className='px-12 py-5'>
@@ -70,6 +74,8 @@ const AuthHome = () => {
                     />
                 </nav>
 
+                {/* Login and Register */}
+
                 <div className='flex justify-center'>
                     <div className='bg-black p-16 self-center mt-2 lg:w-2/5 lg:max-w-md w-full rounded-md'>
                         <h2 className='text-white text-4xl font-semibold mb-10'>
@@ -77,6 +83,9 @@ const AuthHome = () => {
                                 ? 'Ingresar'
                                 : 'Crear una cuenta'}
                         </h2>
+
+                        {/* Container of inputs */}
+
                         <div className='flex flex-col gap-4'>
                             {variant === 'register' && (
                                 <Input
@@ -89,6 +98,7 @@ const AuthHome = () => {
                                     type='text'
                                 />
                             )}
+
                             <Input
                                 id={'email'}
                                 onChange={(e: any) => setEmail(e.target.value)}
@@ -108,6 +118,8 @@ const AuthHome = () => {
                             />
                         </div>
 
+                        {/* Register and Login button */}
+
                         <button
                             className='bg-red-600 py-3 text-white rounded-md block w-full mt-10 hover:bg-red-700 transition'
                             onClick={
@@ -119,7 +131,21 @@ const AuthHome = () => {
                             {variant === 'login' ? 'Ingresar' : 'Crear cuenta'}
                         </button>
 
-                        <p className='text-neutral-500 mt-12 text-end'>
+                        {/* Providers icons */}
+
+                        <div className='flex items-center justify-center gap-4 mt-8'>
+                            <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition'>
+                                <FcGoogle size={30} />
+                            </div>
+
+                            <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition'>
+                                <FaGithub size={30} />
+                            </div>
+                        </div>
+
+                        {/* Helper text */}
+
+                        <p className='text-neutral-500 mt-8 text-end'>
                             {variant === 'login'
                                 ? '¿No tienes cuenta?'
                                 : '¿Ya tienes cuenta?'}
