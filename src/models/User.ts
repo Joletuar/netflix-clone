@@ -7,6 +7,7 @@ const userSchema = new Schema<IUserDB>(
         email: {
             type: String,
             required: true,
+            unique: true,
         },
         image: { type: String },
 

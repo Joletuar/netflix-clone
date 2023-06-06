@@ -1,6 +1,8 @@
 import { User } from '@/models';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import GithubProvider from 'next-auth/providers/github';
+import GoogleProvider from 'next-auth/providers/google';
 
 import db from '../../../database';
 import { compare } from 'bcrypt';
