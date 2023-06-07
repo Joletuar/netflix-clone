@@ -1,14 +1,27 @@
 import { User } from '@/models';
 import NextAuth from 'next-auth';
+
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
+
+import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
 
 import db from '../../../database';
 import { compare } from 'bcrypt';
 
 export default NextAuth({
     providers: [
+        GithubProvider({
+            clientId: process.env.GITHUB_CLIENT_ID || '',
+            clientSecret: process.env.GITHUB_CLIENT_SECRET_KEY || '',
+        }),
+
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID || '',
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET_KEY || '',
+        }),
+
         CredentialsProvider({
             name: 'Credentials',
             id: 'credentials',
@@ -89,6 +102,10 @@ export default NextAuth({
     // Con esto podemos ver los errores en la terminal, siempre y cuando estemos en desarrollo
 
     debug: process.env.NODE_ENV === 'development',
+
+    // Adapter para trabajar con MongoDB
+
+    adapter: MongoDBAdapter(db),
 
     // Opciones de como se manejará la sessión
 
