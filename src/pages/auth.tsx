@@ -138,7 +138,14 @@ const AuthHome = () => {
                                 <FcGoogle size={30} />
                             </div>
 
-                            <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition'>
+                            <div
+                                className='w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition'
+                                onClick={() =>
+                                    signIn('github', {
+                                        callbackUrl: '/',
+                                    })
+                                }
+                            >
                                 <FaGithub size={30} />
                             </div>
                         </div>

@@ -46,4 +46,4 @@ const accountSchema = new Schema<IAccountDB>({
 accountSchema.index({ provider: 1, providerAccountId: 1 }, { unique: true });
 
 export const Account: Model<IAccountDB> =
-    models.Account || model('Account', accountSchema);
+    models.Account || model('accounts', accountSchema);

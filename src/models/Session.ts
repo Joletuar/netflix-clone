@@ -18,4 +18,4 @@ const sessionSchema = new Schema<ISessionDB>({
 });
 
 export const Session: Model<ISessionDB> =
-    models.Session || model('Session', sessionSchema);
+    models.Session || model('sessions', sessionSchema);

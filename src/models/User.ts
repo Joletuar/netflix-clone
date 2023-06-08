@@ -39,4 +39,4 @@ const userSchema = new Schema<IUserDB>(
 );
 
 export const User: Model<IUserDB> =
-    models.User || model<IUserDB>('User', userSchema);
+    models.User || model<IUserDB>('users', userSchema);

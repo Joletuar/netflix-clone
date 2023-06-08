@@ -21,4 +21,4 @@ verificationTokenSchema.index({ identifier: 1, token: 1 }, { unique: true });
 
 export const VerificationToken =
     models.VerificationToken ||
-    model('VerificationToken', verificationTokenSchema);
+    model('verificationTokens', verificationTokenSchema);

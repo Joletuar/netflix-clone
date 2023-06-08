@@ -25,4 +25,4 @@ const movieSchema = new Schema<IMovieDB>({
 });
 
 export const Movie: Model<IMovieDB> =
-    models.Movie || model('Movie', movieSchema);
+    models.Movie || model('movies', movieSchema);

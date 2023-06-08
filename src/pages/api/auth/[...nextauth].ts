@@ -1,4 +1,3 @@
-import { User } from '@/models';
 import NextAuth from 'next-auth';
 
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -7,7 +6,8 @@ import GoogleProvider from 'next-auth/providers/google';
 
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
 
-import db from '../../../database';
+import db, { clientPromise } from '../../../database';
+import { User } from '@/models';
 import { compare } from 'bcrypt';
 
 export default NextAuth({
@@ -105,7 +105,7 @@ export default NextAuth({
 
     // Adapter para trabajar con MongoDB
 
-    adapter: MongoDBAdapter(db),
+    adapter: MongoDBAdapter(clientPromise),
 
     // Opciones de como se manejará la sessión
 
@@ -121,4 +121,23 @@ export default NextAuth({
     // Indidcamos que tome la variable de entorno como semilla para firmar los tokens
 
     secret: process.env.NEXTAUTH_JWT_SECRET,
+
+    // Funciones
+
+    callbacks: {
+        async signIn({ user, account }) {
+            if (account && account.provider === 'github') {
+                try {
+                    await User.findOneAndUpdate(
+                        { email: user.email },
+                        { $set: { name: user.name, image: user.image } },
+                        { upsert: true, new: true }
+                    );
+                } catch (error) {
+                    console.error('Error saving user:', error);
+                }
+            }
+            return true;
+        },
+    },
 });
