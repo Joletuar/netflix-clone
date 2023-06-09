@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
 export interface IAccountDB {
-  userId: Types.ObjectId;
+  userId: Types.ObjectId | string;
   typeAccount: string;
   provider: string;
   providerAccountId: string;
@@ -10,6 +10,6 @@ export interface IAccountDB {
   expires_at?: number;
   token_type?: string;
   scope?: string;
-  id_token?: Types.ObjectId;
+  id_token?: Types.ObjectId | string;
   session_state?: string;
 }

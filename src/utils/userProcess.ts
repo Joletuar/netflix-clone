@@ -3,7 +3,7 @@ import db from '../database';
 
 import { User } from '@/models';
 
-// Verificamos si un usuario existe o no en la bd
+// verificamos si un usuario existe o no en la bd
 
 export const getUser = async (email: string = '') => {
   await db.Connect();
@@ -15,13 +15,21 @@ export const getUser = async (email: string = '') => {
 
 // actualizamos los datos del usuario si existe, caso contrario se crea uno nuevo
 
-export const updateUser = async (emailSearch: string = '', datos: IUserDB) => {
+export const updateUser = async (
+  emailSearch: string = '',
+  userData: IUserDB
+) => {
   await db.Connect();
 
   try {
     await User.findOneAndUpdate(
       { email: emailSearch },
-      { $set: { ...datos, password: datos?.password ? datos.password : '@' } },
+      {
+        $set: {
+          ...userData,
+          password: userData?.password ? userData.password : '@',
+        },
+      },
       { upsert: true, new: true }
     );
   } catch (error) {

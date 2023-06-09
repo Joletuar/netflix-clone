@@ -4,9 +4,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 
-import { User } from '@/models';
 import { compare } from 'bcrypt';
-import { getUser, updateUser } from '@/utils/userProcess';
+import { getUser, updateAccount, updateUser } from '@/utils';
 import { IUserDB } from '@/interfaces';
 
 export default NextAuth({
@@ -136,20 +135,65 @@ export default NextAuth({
         const image = user?.image as string | undefined;
         const password = '@';
 
-        let datos = { name, email, image, password };
+        let userData: IUserDB = { name, email, image, password };
+
+        const {
+          provider,
+          providerAccountId,
+          type: typeAccount,
+          access_token,
+          expires_at,
+          id_token,
+          refresh_token,
+          scope,
+          session_state,
+          token_type,
+        } = account;
 
         switch (account.provider) {
           case 'github':
             // Buscamos un user y actualizamos, si no existe lo creamos
 
-            await updateUser(emailSearch, datos);
+            await updateUser(emailSearch, userData);
+
+            // Insertamos la cuenta con la que ingreso/registro el usuario
+
+            await updateAccount({
+              provider,
+              providerAccountId,
+              typeAccount,
+              access_token,
+              expires_at,
+              id_token,
+              refresh_token,
+              scope,
+              session_state,
+              token_type,
+              userId: account?.userId as string,
+            });
 
             return true;
 
           case 'google':
             // Buscamos un user y actualizamos, si no existe lo creamos
 
-            await updateUser(emailSearch, datos);
+            await updateUser(emailSearch, userData);
+
+            // Insertamos la cuenta con la que ingreso/registro el usuario
+
+            await updateAccount({
+              provider,
+              providerAccountId,
+              typeAccount,
+              access_token,
+              expires_at,
+              id_token,
+              refresh_token,
+              scope,
+              session_state,
+              token_type,
+              userId: account?.userId as string,
+            });
 
             return true;
 
