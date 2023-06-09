@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions, Session } from 'next-auth';
 
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GithubProvider from 'next-auth/providers/github';
@@ -8,7 +8,11 @@ import { compare } from 'bcrypt';
 import { getUser, updateAccount, updateUser } from '@/utils';
 import { IUserDB } from '@/interfaces';
 
-export default NextAuth({
+interface CustomSession extends Session {
+  access_token: string;
+}
+
+export const authOptions: NextAuthOptions = {
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID || '',
@@ -26,13 +30,11 @@ export default NextAuth({
       credentials: {
         // Campos que vamos a validar
 
-        // email
         email: {
           label: 'Email',
           type: 'text',
         },
 
-        // password
         password: {
           label: 'Password',
           type: 'password',
@@ -43,11 +45,13 @@ export default NextAuth({
       /**
        * Esta proceso se ejecuta cuando llamamos el hook signIn dentro de nuestra App
        */
+
       async authorize(credentials) {
         const email = credentials?.email;
         const password = credentials?.password;
 
         // Si no ingreso los campos, error
+
         if (!email || !password) {
           throw new Error('Email y password son requeridos');
         }
@@ -112,6 +116,55 @@ export default NextAuth({
   // Funciones
 
   callbacks: {
+    // Cuando queremos obtener el token se llama a esta función
+
+    async jwt({ token, account, user }) {
+      // Validamos que tengamos una cuenta
+
+      if (account) {
+        // Verificamos que tipo de autenticación se utilizó
+
+        token.access_token = account?.access_token;
+
+        switch (account.type) {
+          case 'credentials':
+            // Logeo mediante credenciales personalizadas
+
+            token.user = user;
+            break;
+
+          case 'oauth':
+            // Logeo mediante credenciales de una red externa. ej: Github, Google
+
+            // TODO: consultar los datos del usuario en la BD
+
+            break;
+
+          default:
+            break;
+        }
+      }
+
+      return token;
+    },
+
+    // Cuando queremos obtener los datos de la sesion
+
+    async session({ session, token }) {
+      session.user = token?.user as IUserDB;
+
+      // Con la interfaz arreglada agrregamos todo lo que nos falta
+
+      const customSession: CustomSession = {
+        ...session,
+        access_token: token?.access_token as string,
+      };
+
+      return customSession;
+    },
+
+    // Controla cuando un usuario se intenta logear
+
     async signIn({ user, account, credentials }) {
       if (!account) {
         return '/home'; // redireccionamos
@@ -150,57 +203,30 @@ export default NextAuth({
           token_type,
         } = account;
 
-        switch (account.provider) {
-          case 'github':
-            // Buscamos un user y actualizamos, si no existe lo creamos
+        // Buscamos un user y actualizamos, si no existe lo creamos
 
-            await updateUser(emailSearch, userData);
+        await updateUser(emailSearch, userData);
 
-            // Insertamos la cuenta con la que ingreso/registro el usuario
+        // Insertamos la cuenta con la que ingreso/registro el usuario
 
-            await updateAccount({
-              provider,
-              providerAccountId,
-              typeAccount,
-              access_token,
-              expires_at,
-              id_token,
-              refresh_token,
-              scope,
-              session_state,
-              token_type,
-              userId: account?.userId as string,
-            });
+        await updateAccount({
+          provider,
+          providerAccountId,
+          typeAccount,
+          access_token,
+          expires_at,
+          id_token,
+          refresh_token,
+          scope,
+          session_state,
+          token_type,
+          userId: account?.userId as string,
+        });
 
-            return true;
-
-          case 'google':
-            // Buscamos un user y actualizamos, si no existe lo creamos
-
-            await updateUser(emailSearch, userData);
-
-            // Insertamos la cuenta con la que ingreso/registro el usuario
-
-            await updateAccount({
-              provider,
-              providerAccountId,
-              typeAccount,
-              access_token,
-              expires_at,
-              id_token,
-              refresh_token,
-              scope,
-              session_state,
-              token_type,
-              userId: account?.userId as string,
-            });
-
-            return true;
-
-          default:
-            return '/home';
-        }
+        return true;
       }
     },
   },
-});
+};
+
+export default NextAuth(authOptions);
