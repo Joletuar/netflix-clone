@@ -5,15 +5,15 @@ import { Users } from '@/models';
 
 // verificamos si un usuario existe o no en la bd
 
-export const getUser = async (email: string = '') => {
+export const getUser = async (emailIn: string) => {
   await db.Connect();
-  const userFound = await Users.findOne({ email }).lean();
+  const userFound = await Users.findOne({ email: emailIn }).lean();
   await db.Disconnect();
 
   return userFound;
 };
 
-export const updateUser = async (
+export const createNewUserOauth = async (
   email: string,
   username: string,
   password: string
@@ -24,10 +24,10 @@ export const updateUser = async (
 
   // Validamos que el correo no esté repetido
 
-  const userFound = await Users.findOne({ email });
+  const userFound = await Users.findOne({ email }).lean();
 
   if (userFound) {
-    throw new Error("'El correo ya se encuentra registrado'");
+    return;
   }
 
   // Hasheamos el password

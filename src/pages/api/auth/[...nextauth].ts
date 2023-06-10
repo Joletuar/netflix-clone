@@ -5,7 +5,7 @@ import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 
 import { compare } from 'bcrypt';
-import { getUser, updateAccount, updateUser } from '@/utils';
+import { getUser, updateAccount, createNewUserOauth } from '@/utils';
 import { IUserDB } from '@/interfaces';
 
 interface CustomSession extends Session {
@@ -110,13 +110,12 @@ export const authOptions: NextAuthOptions = {
   },
 
   /**
-   * jwt: {secret} no hace falta en las ultimas versiones. Toma por defecto ya la variable de entorno NEXTAUTH_JWT_SECRET para firmar el jwt
-   *
+   * jwt: {secret} no hace falta en las ultimas versiones. Toma por defecto ya la variable de entorno NEXTAUTH_SECRET para firmar el jwt
    */
 
   // Indidcamos que tome la variable de entorno como semilla para firmar los tokens
 
-  secret: process.env.NEXTAUTH_JWT_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
 
   // Funciones
 
@@ -128,8 +127,10 @@ export const authOptions: NextAuthOptions = {
         return '/auth'; // redireccionamos
       }
 
+      // Cuando es oauth, creamos el usuario si no existe
+
       if (account.type === 'oauth') {
-        await updateUser(
+        await createNewUserOauth(
           profile?.name as string,
           profile?.email as string,
           '@'
@@ -170,7 +171,7 @@ export const authOptions: NextAuthOptions = {
 
     // Cuando queremos obtener el token se llama a esta función
 
-    async jwt({ token, account, user }) {
+    async jwt({ token, account, user, profile }) {
       // Validamos que tengamos una cuenta
 
       if (account) {
@@ -188,7 +189,25 @@ export const authOptions: NextAuthOptions = {
           case 'oauth':
             // Logeo mediante credenciales de una red externa. ej: Github, Google
 
-            // TODO: consultar los datos del usuario en la BD
+            // Obtenemos los datos del usuario para agregarlo al payload del token
+
+            const userFound = await getUser(profile?.email as string);
+
+            if (!userFound) {
+              throw new Error('No existen datos del usuario');
+            }
+
+            const userToken = {
+              id: userFound._id.toString(),
+              name: userFound?.name,
+              image: userFound?.image,
+              emailVerifiedDate: userFound?.emailVerifiedDate,
+              favoriteIds: userFound?.favoriteIds,
+              session: userFound?.session,
+              accounts: userFound?.accounts,
+            };
+
+            token.user = userToken;
 
             break;
 
