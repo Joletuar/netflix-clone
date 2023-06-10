@@ -5,7 +5,7 @@ import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 
 import { compare } from 'bcrypt';
-import { getUser, updateAccount, createNewUserOauth } from '@/utils';
+import { getUser, createAccount, createNewUserOauth } from '@/utils';
 import { IUserDB } from '@/interfaces';
 
 interface CustomSession extends Session {
@@ -152,7 +152,7 @@ export const authOptions: NextAuthOptions = {
 
       // Insertamos la cuenta con la que ingreso/registro el usuario
 
-      await updateAccount({
+      await createAccount({
         provider,
         providerAccountId,
         typeAccount,

@@ -27,6 +27,8 @@ export const createNewUserOauth = async (
   const userFound = await Users.findOne({ email }).lean();
 
   if (userFound) {
+    // TODO: si el usuario ya se encuentra registrado verificar cuenta
+
     return;
   }
 
