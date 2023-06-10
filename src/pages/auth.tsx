@@ -124,6 +124,7 @@ const AuthHome = () => {
                 onClick={() =>
                   signIn('google', {
                     callbackUrl: '/',
+                    redirect: false,
                   })
                 }
               >
@@ -135,6 +136,7 @@ const AuthHome = () => {
                 onClick={() =>
                   signIn('github', {
                     callbackUrl: '/',
+                    redirect: false,
                   })
                 }
               >

@@ -81,8 +81,13 @@ export const authOptions: NextAuthOptions = {
          */
 
         return {
-          id: userFound._id,
-          ...userFound,
+          id: userFound._id.toString(),
+          name: userFound?.name,
+          image: userFound?.image,
+          emailVerifiedDate: userFound?.emailVerifiedDate,
+          favoriteIds: userFound?.favoriteIds,
+          session: userFound?.session,
+          accounts: userFound?.accounts,
         };
       },
     }),
@@ -116,6 +121,53 @@ export const authOptions: NextAuthOptions = {
   // Funciones
 
   callbacks: {
+    // Controla cuando un usuario se intenta logear
+
+    async signIn({ account, profile }) {
+      if (!account) {
+        return '/auth'; // redireccionamos
+      }
+
+      if (account.type === 'oauth') {
+        await updateUser(
+          profile?.name as string,
+          profile?.email as string,
+          '@'
+        );
+      }
+
+      const {
+        provider,
+        providerAccountId,
+        type: typeAccount,
+        access_token,
+        expires_at,
+        id_token,
+        refresh_token,
+        scope,
+        session_state,
+        token_type,
+      } = account;
+
+      // Insertamos la cuenta con la que ingreso/registro el usuario
+
+      await updateAccount({
+        provider,
+        providerAccountId,
+        typeAccount,
+        access_token,
+        expires_at,
+        id_token,
+        refresh_token,
+        scope,
+        session_state,
+        token_type,
+        userId: account?.userId as string,
+      });
+
+      return true;
+    },
+
     // Cuando queremos obtener el token se llama a esta función
 
     async jwt({ token, account, user }) {
@@ -148,7 +200,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
 
-    // Cuando queremos obtener los datos de la sesion
+    // Cuando queremos obtener los datos de la sesion se llama a esta función
 
     async session({ session, token }) {
       session.user = token?.user as IUserDB;
@@ -162,71 +214,20 @@ export const authOptions: NextAuthOptions = {
 
       return customSession;
     },
-
-    // Controla cuando un usuario se intenta logear
-
-    async signIn({ user, account, credentials }) {
-      if (!account) {
-        return '/home'; // redireccionamos
-      }
-
-      const emailSearch = credentials?.email as string;
-
-      if (account.type === 'credentials') {
-        // Conexión a BD y busqueda el usuario
-
-        const userFound = await getUser(emailSearch);
-
-        if (!userFound) return '/home';
-
-        return true;
-      } else {
-        // Obtenemos los datos del user que retorna el provider
-
-        const name = user?.name as string;
-        const email = user?.email as string | undefined;
-        const image = user?.image as string | undefined;
-        const password = '@';
-
-        let userData: IUserDB = { name, email, image, password };
-
-        const {
-          provider,
-          providerAccountId,
-          type: typeAccount,
-          access_token,
-          expires_at,
-          id_token,
-          refresh_token,
-          scope,
-          session_state,
-          token_type,
-        } = account;
-
-        // Buscamos un user y actualizamos, si no existe lo creamos
-
-        await updateUser(emailSearch, userData);
-
-        // Insertamos la cuenta con la que ingreso/registro el usuario
-
-        await updateAccount({
-          provider,
-          providerAccountId,
-          typeAccount,
-          access_token,
-          expires_at,
-          id_token,
-          refresh_token,
-          scope,
-          session_state,
-          token_type,
-          userId: account?.userId as string,
-        });
-
-        return true;
-      }
-    },
   },
 };
 
 export default NextAuth(authOptions);
+
+// ---- Notas
+
+/**
+1. `signIn`: Este callback se ejecuta después de que las credenciales del usuario se han validado en la función `authorize`. Aquí se pueden realizar acciones adicionales al momento de iniciar sesión, como almacenar información adicional del usuario o realizar llamadas a APIs externas. Si este callback devuelve `true`, se considera que la autenticación ha sido exitosa.
+
+2. `redirect`: Este callback se ejecuta después de que el usuario ha iniciado sesión exitosamente y antes de redirigirlo a la página deseada. Aquí se puede personalizar la redirección del usuario, por ejemplo, redirigirlo a una página específica de tu aplicación. Si este callback devuelve una URL, se utilizará esa URL para redirigir al usuario.
+
+3. `session`: Este callback se ejecuta después de que el usuario ha iniciado sesión y antes de crear o actualizar la sesión de NextAuth.js. Aquí se puede personalizar la información almacenada en la sesión del usuario, agregando datos adicionales al objeto `session`. Si este callback devuelve un objeto `session`, se utilizará ese objeto como la sesión del usuario.
+
+4. `jwt`: Este callback se ejecuta después de que se ha creado o actualizado la sesión de NextAuth.js y antes de generar el token JWT (JSON Web Token) que se utilizará para autenticar al usuario en las solicitudes posteriores. Aquí se puede personalizar los datos que se incluirán en el token JWT, como agregar información adicional del usuario o establecer un tiempo de expiración personalizado. Si este callback devuelve un objeto `token`, se utilizará ese objeto como el token JWT del usuario.
+
+*/

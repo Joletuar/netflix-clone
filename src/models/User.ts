@@ -38,5 +38,5 @@ const userSchema = new Schema<IUserDB>(
   }
 );
 
-export const User: Model<IUserDB> =
-  models.User || model<IUserDB>('users', userSchema);
+export const Users: Model<IUserDB> =
+  models.Users || model<IUserDB>('Users', userSchema);

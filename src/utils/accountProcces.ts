@@ -1,7 +1,7 @@
 import { IAccountDB } from '@/interfaces';
 import db from '../database';
 
-import { Account } from '@/models';
+import { Accounts } from '@/models';
 
 // actualizamos los datos de la cuenta de usuario, caso contrario se crea uno nuevo
 
@@ -9,7 +9,7 @@ export const updateAccount = async (account: IAccountDB) => {
   await db.Connect();
 
   try {
-    await Account.findOneAndUpdate(
+    await Accounts.findOneAndUpdate(
       {
         provider: account.provider,
         providerAccountId: account.providerAccountId,

@@ -9,8 +9,11 @@ export async function middleware(req: NextRequest) {
 
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-  if (session?.user) {
-    return NextResponse.redirect('/auth');
+  const url = req.nextUrl.clone();
+  url.pathname = '/auth';
+
+  if (!session?.user) {
+    return NextResponse.redirect(url);
   }
 
   NextResponse.next();
