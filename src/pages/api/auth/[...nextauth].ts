@@ -8,7 +8,7 @@ import { compare } from 'bcrypt';
 import { getUser, createAccount, createNewUserOauth } from '@/utils';
 import { IUserDB } from '@/interfaces';
 
-interface CustomSession extends Session {
+export interface CustomSession extends Session {
   access_token: string;
 }
 
@@ -82,6 +82,7 @@ export const authOptions: NextAuthOptions = {
 
         return {
           id: userFound._id.toString(),
+          email: userFound.email,
           name: userFound?.name,
           image: userFound?.image,
           emailVerifiedDate: userFound?.emailVerifiedDate,
@@ -199,6 +200,7 @@ export const authOptions: NextAuthOptions = {
 
             const userToken = {
               id: userFound._id.toString(),
+              email: userFound.email,
               name: userFound?.name,
               image: userFound?.image,
               emailVerifiedDate: userFound?.emailVerifiedDate,

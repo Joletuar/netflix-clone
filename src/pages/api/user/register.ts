@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import bcrypt from 'bcrypt';
-import db from '../../../database';
+import db from '@/database';
 import { Users } from '@/models';
 
 type Response = { message: string } | {};
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response>
 ) {
