@@ -14,8 +14,8 @@ export const getUser = async (emailIn: string) => {
 };
 
 export const createNewUserOauth = async (
-  email: string,
   username: string,
+  email: string,
   password: string
 ) => {
   // Conexión a DB
