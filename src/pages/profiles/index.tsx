@@ -10,7 +10,7 @@ const ProfilePage = () => {
   const { user } = useCurrentUser();
 
   return (
-    <div className='flex justify-center  items-center h-full'>
+    <div className='flex justify-center items-center h-full'>
       <div className='flex flex-col'>
         <h1 className='text-3xl md:text-6xl text-white text-center'>
           Elige tu perfil
