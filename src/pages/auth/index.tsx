@@ -1,8 +1,7 @@
 import { useCallback, useState } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 
-import logo from '../../public/images/logo.png';
+import logo from '../../../public/images/logo.png';
 import { Input } from '@/components';
 
 import axios from 'axios';
@@ -15,8 +14,6 @@ const AuthHome = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [variant, setVariant] = useState('login');
-
-  const router = useRouter();
 
   // Función que permite cambiar la variante
   const toggleVariant = useCallback(() => {
@@ -31,17 +28,13 @@ const AuthHome = () => {
       await signIn('credentials', {
         email,
         password,
-        callbackUrl: '/', // ruta a donde se redigirá si se logea correctamente, por defecto es la misma página
-        redirect: false, // al estar en false nextauth no redireccionará automaticamente
+        callbackUrl: '/profiles', // ruta a donde se redigirá si se logea correctamente, por defecto es la misma página
+        // redirect: false, // al estar en false nextauth no redireccionará automaticamente
       });
-
-      // Redirecionamos manualmente nosotros
-
-      router.push('/');
     } catch (error) {
       console.log(error);
     }
-  }, [email, password, router]);
+  }, [email, password]);
 
   // Función para registrar un nuevo usuario
   const handleRegister = useCallback(async () => {
@@ -123,8 +116,7 @@ const AuthHome = () => {
                 className='w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition'
                 onClick={() =>
                   signIn('google', {
-                    callbackUrl: '/',
-                    redirect: false,
+                    callbackUrl: '/profiles',
                   })
                 }
               >
@@ -135,8 +127,7 @@ const AuthHome = () => {
                 className='w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition'
                 onClick={() =>
                   signIn('github', {
-                    callbackUrl: '/',
-                    redirect: false,
+                    callbackUrl: '/profiles',
                   })
                 }
               >

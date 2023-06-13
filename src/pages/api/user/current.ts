@@ -7,6 +7,8 @@ import { Users } from '@/models';
 
 type Response = { message: string } | {};
 
+// shorcut: napi
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response>
@@ -23,6 +25,8 @@ export default async function handler(
       });
   }
 }
+
+// Obtenemos la info del user
 
 const getUser = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
   // Verificamos existe un sesión activa
