@@ -6,10 +6,11 @@ import GoogleProvider from 'next-auth/providers/google';
 
 import { compare } from 'bcrypt';
 import { getUser, createAccount, createNewUserOauth } from '@/utils';
-import { IUserDB } from '@/interfaces';
+import { IUser } from '@/interfaces';
 
 export interface CustomSession extends Session {
   access_token: string;
+  user: IUser;
 }
 
 export const authOptions: NextAuthOptions = {
@@ -85,7 +86,6 @@ export const authOptions: NextAuthOptions = {
           email: userFound.email,
           name: userFound?.name,
           image: userFound?.image,
-          emailVerifiedDate: userFound?.emailVerifiedDate,
           favoriteIds: userFound?.favoriteIds,
           session: userFound?.session,
           accounts: userFound?.accounts,
@@ -203,7 +203,6 @@ export const authOptions: NextAuthOptions = {
               email: userFound.email,
               name: userFound?.name,
               image: userFound?.image,
-              emailVerifiedDate: userFound?.emailVerifiedDate,
               favoriteIds: userFound?.favoriteIds,
               session: userFound?.session,
               accounts: userFound?.accounts,
@@ -224,12 +223,11 @@ export const authOptions: NextAuthOptions = {
     // Cuando queremos obtener los datos de la sesion se llama a esta función
 
     async session({ session, token }) {
-      session.user = token?.user as IUserDB;
-
       // Con la interfaz arreglada agrregamos todo lo que nos falta
 
       const customSession: CustomSession = {
         ...session,
+        user: token?.user as IUser,
         access_token: token?.access_token as string,
       };
 

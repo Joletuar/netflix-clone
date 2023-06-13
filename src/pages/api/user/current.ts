@@ -26,14 +26,13 @@ export default async function handler(
 
 const getUser = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
   // Verificamos existe un sesión activa
+  // Si funcion getServerSideSession en el api
 
   const session: CustomSession | null = await getServerSession(
     req,
     res,
     authOptions
   );
-
-  console.log({ sessionApi: session });
 
   if (!session?.user?.email) {
     return res.status(401).json({
