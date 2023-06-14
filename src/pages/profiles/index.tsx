@@ -38,3 +38,7 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
+
+/**
+ * group: permite aplicar estilos cuando se realiza un accion sobre el contenedor padre
+ */
