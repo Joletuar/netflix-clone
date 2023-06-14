@@ -4,10 +4,16 @@ import { getToken } from 'next-auth/jwt';
 
 export async function middleware(req: NextRequest) {
   // Obtenemos la sesión del usuario a traves del token
-
   // No funciona aquí el getServerSession()
-
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+  if (req.nextUrl.pathname.startsWith('/auth') && session) {
+    return NextResponse.redirect(new URL('/', req.url));
+  }
+
+  if (req.nextUrl.pathname.startsWith('/auth') && !session) {
+    return;
+  }
 
   const urlLogin = req.nextUrl.clone();
   urlLogin.pathname = '/auth';
@@ -22,5 +28,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/profiles/:path*'],
+  matcher: ['/', '/auth/:path*', '/profiles/:path*'],
 };

@@ -5,14 +5,23 @@ import { AiOutlineInfoCircle } from 'react-icons/ai';
 export const Billboard = () => {
   const { movie, isError, isLoading } = useBillboard();
 
-  if (isLoading) {
+  if (isLoading && !isError) {
     return null;
   }
 
+  if (!isLoading && isError) {
+    return (
+      <p className='text-4xl text-white font-bold text-center'>
+        {' '}
+        Hubo un error al cargar el contenido...
+      </p>
+    );
+  }
+
   return (
-    <div className='realtive h-[56.25vw]'>
+    <div className='relative h-[56.25vw]'>
       <video
-        className='w-full h-[56.25vw] object-cover brightness-[60%]'
+        className='w-full h-[56.25vw] object-cover brightness-[60%] transition duration-500'
         autoPlay
         muted
         loop
@@ -20,7 +29,7 @@ export const Billboard = () => {
         src={movie?.videoUrl}
       />
 
-      <div className='absolute top-[30%] ml-5 md:top-[40%] md:ml-16'>
+      <div className='absolute top-[30%] ml-4 md:top-[40%] md:ml-16'>
         <p className='text-white text-xl md:text-5xl h-full w-1/2 lg:text-6xl font-bold drop-shadow-xl'>
           {movie?.title}
         </p>

@@ -6,10 +6,13 @@ import { verifySession } from '@/utils';
 
 type Response = { message: string } | {};
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   switch (req.method) {
     case 'GET':
-      return getDataMovie(req, res);
+      return getRandomMovie(req, res);
 
     default:
       // Devolvemos error si se accede a esta ruta a traves de un método que no definamos
@@ -20,7 +23,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-const getDataMovie = async (
+const getRandomMovie = async (
   req: NextApiRequest,
   res: NextApiResponse<Response>
 ) => {

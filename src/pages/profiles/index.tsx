@@ -7,7 +7,20 @@ import { useCurrentUser } from '@/hooks';
 
 const ProfilePage = () => {
   const router = useRouter();
-  const { user } = useCurrentUser();
+  const { user, isLoading, isError } = useCurrentUser();
+
+  if (isLoading && !isError) {
+    return null;
+  }
+
+  if (!isLoading && isError) {
+    return (
+      <p className='text-4xl text-white font-bold text-center'>
+        {' '}
+        Hubo un error al cargar los perfiles...
+      </p>
+    );
+  }
 
   return (
     <div className='flex justify-center items-center h-full'>
