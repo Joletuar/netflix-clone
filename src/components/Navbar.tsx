@@ -18,7 +18,7 @@ export const Navbar = () => {
     // Evento que estará pendiente si la pos. actual en "Y" del scroll es mayor o menor que la constante definida
 
     const handleScroll = () =>
-      window.screenY >= TOP_OFFSET
+      window.scrollY >= TOP_OFFSET
         ? setShowBackground(true)
         : setShowBackground(false);
 
@@ -45,7 +45,7 @@ export const Navbar = () => {
     <nav className='w-full fixed z-40 '>
       <div
         className={`px-4 md:px-16 py-6 flex items-center transition duration-500 ${
-          showBackground ? ' bg-zinc-900 bg-opacity-90' : ''
+          showBackground ? ' bg-zinc-900 bg-opacity-90 backdrop-blur-sm' : ''
         }`}
       >
         <Image className='h-4 lg:h-7 w-fit' src={logo} alt='logo' priority />
