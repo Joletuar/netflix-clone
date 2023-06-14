@@ -1,4 +1,4 @@
-import { Navbar } from '@/components';
+import { Billboard, Navbar } from '@/components';
 import { useCurrentUser } from '@/hooks';
 
 const Home = () => {
@@ -7,6 +7,8 @@ const Home = () => {
   return (
     <>
       <Navbar />
+
+      <Billboard />
     </>
   );
 };

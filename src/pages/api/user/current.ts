@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { CustomSession, authOptions } from '../auth/[...nextauth]';
-import { getServerSession } from 'next-auth';
 
 import db from '@/database';
 import { Users } from '@/models';
+import { verifySession } from '@/utils';
 
 type Response = { message: string } | {};
 
@@ -32,17 +31,7 @@ const getUser = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
   // Verificamos existe un sesión activa
   // Si funcion getServerSideSession en el api
 
-  const session: CustomSession | null = await getServerSession(
-    req,
-    res,
-    authOptions
-  );
-
-  if (!session?.user?.email) {
-    return res.status(401).json({
-      message: 'NOT_SESSION',
-    });
-  }
+  const session = await verifySession(req, res);
 
   // Obtenemos el user
 
