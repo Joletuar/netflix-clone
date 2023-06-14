@@ -111,3 +111,7 @@ export const Navbar = () => {
     </nav>
   );
 };
+
+/**
+ * backdrop-blur-sm: permite aplicar un desfonque al fondo del elemento
+ */
