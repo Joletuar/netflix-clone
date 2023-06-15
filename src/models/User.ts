@@ -17,19 +17,20 @@ const userSchema = new Schema<IUserDB>(
     password: { type: String, required: true },
     favoriteIds: [
       {
-        type: Types.ObjectId,
+        type: Schema.Types.ObjectId,
+        ref: 'Movies',
       },
     ],
     session: [
       {
-        type: Types.ObjectId,
-        ref: 'Session',
+        type: Schema.Types.ObjectId,
+        ref: 'Sessions',
       },
     ],
     accounts: [
       {
-        type: Types.ObjectId,
-        ref: 'Account',
+        type: Schema.Types.ObjectId,
+        ref: 'Accounts',
       },
     ],
   },

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { IMovie } from '@/interfaces';
 
 import { BsFillPlayFill } from 'react-icons/bs';
+import FavoriteButton from './FavoriteButton';
 
 interface Props extends IMovie {}
 
@@ -45,6 +46,7 @@ export const MovieCard: FC<Props> = ({
             >
               <BsFillPlayFill size={30} />
             </div>
+            <FavoriteButton idMovie={id} />
           </div>
 
           <p className='text-green-400 font-semibold mt-4'>

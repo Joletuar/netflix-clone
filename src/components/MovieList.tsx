@@ -21,7 +21,7 @@ export const MovieList: FC<Props> = ({ data, title }) => {
 
         <div className='grid grid-cols-2 md:grid-cols-4 gap-2'>
           {data!.map((movie) => (
-            <MovieCard key={movie._id} {...movie} />
+            <MovieCard key={movie?._id} {...movie} />
           ))}
         </div>
       </div>

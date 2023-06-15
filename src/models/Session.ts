@@ -9,6 +9,7 @@ const sessionSchema = new Schema<ISessionDB>({
   },
   userId: {
     type: Schema.Types.ObjectId,
+    ref: 'Users',
     required: true,
   },
   expires: {

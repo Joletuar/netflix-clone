@@ -1,8 +1,9 @@
 import { Billboard, MovieList, Navbar } from '@/components';
-import { useMovies } from '@/hooks';
+import { useFavorites, useMovies } from '@/hooks';
 
 const Home = () => {
   const { movies, isError, isLoading } = useMovies();
+  const { favoritesList } = useFavorites();
 
   if (isLoading && !isError) {
     return null;
@@ -24,6 +25,8 @@ const Home = () => {
 
       <div className='pb-40'>
         <MovieList title='Popular ahora' data={movies} />
+
+        <MovieList title='Favoritos' data={favoritesList ?? []} />
       </div>
     </>
   );
