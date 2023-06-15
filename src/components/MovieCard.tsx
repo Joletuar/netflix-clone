@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import { IMovie } from '@/interfaces';
 
@@ -18,6 +19,8 @@ export const MovieCard: FC<Props> = ({
   duration,
   videoUrl,
 }) => {
+  const router = useRouter();
+
   return (
     <div className='group bg-zinc-900 col-span relative h-[12vw]'>
       <Image
@@ -42,7 +45,7 @@ export const MovieCard: FC<Props> = ({
           <div className='flex items-center gap-3'>
             <div
               className='cursor-pointer w-6 h-6 lg:w-10 lg:h-10 bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300'
-              onClick={() => {}}
+              onClick={() => router.push(`/watch/${id}`)}
             >
               <BsFillPlayFill size={30} />
             </div>

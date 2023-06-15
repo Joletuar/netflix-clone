@@ -1,9 +1,14 @@
+import { useContext } from 'react';
+
 import { useBillboard } from '@/hooks';
 
 import { AiOutlineInfoCircle } from 'react-icons/ai';
+import { PlayButton } from './PlayButton';
+import { ModalContext } from '@/context';
 
 export const Billboard = () => {
   const { movie, isError, isLoading } = useBillboard();
+  const { openModal } = useContext(ModalContext);
 
   if (isLoading && !isError) {
     return null;
@@ -38,7 +43,8 @@ export const Billboard = () => {
         </p>
 
         <div className='flex items-center mt-3 md:mt-4 gap-3'>
-          <button className='bg-white text-white bg-opacity-30 rounded-md py-1 md:py-2 px-2 md:px-4 w-auto text-xs lg:text-lg flex gap-2 items-center hover:bg-opacity-20 transition'>
+          <PlayButton movieId={movie?._id!} />
+          <button className='bg-white text-white bg-opacity-30 rounded-md py-1 md:py-2 px-2 md:px-4 w-auto text-xs lg:text-lg flex gap-2 items-center hover:bg-opacity-20 transition' onClick={() => openModal(movie?._id.toString()!)}>
             <AiOutlineInfoCircle />
             Más información
           </button>

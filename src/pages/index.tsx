@@ -1,9 +1,13 @@
-import { Billboard, MovieList, Navbar } from '@/components';
+import { useContext } from 'react';
+
+import { Billboard, InfoModal, MovieList, Navbar } from '@/components';
 import { useFavorites, useMovies } from '@/hooks';
+import { ModalContext } from '@/context';
 
 const Home = () => {
   const { movies, isError, isLoading } = useMovies();
   const { favoritesList } = useFavorites();
+  const { isOpen } = useContext(ModalContext);
 
   if (isLoading && !isError) {
     return null;
@@ -20,12 +24,13 @@ const Home = () => {
 
   return (
     <>
+      {isOpen && <InfoModal />}
+
       <Navbar />
       <Billboard />
 
       <div className='pb-40'>
         <MovieList title='Popular ahora' data={movies} />
-
         <MovieList title='Favoritos' data={favoritesList ?? []} />
       </div>
     </>
