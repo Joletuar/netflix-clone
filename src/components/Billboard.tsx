@@ -12,7 +12,6 @@ export const Billboard = () => {
   if (!isLoading && isError) {
     return (
       <p className='text-4xl text-white font-bold text-center'>
-        {' '}
         Hubo un error al cargar el contenido...
       </p>
     );

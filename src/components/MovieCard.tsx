@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { IMovie } from '@/interfaces';
 
 import { BsFillPlayFill } from 'react-icons/bs';
-import FavoriteButton from './FavoriteButton';
+import { FavoriteButton } from './';
 
 interface Props extends IMovie {}
 

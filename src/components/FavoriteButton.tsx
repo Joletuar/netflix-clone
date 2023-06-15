@@ -9,10 +9,11 @@ interface Props {
   idMovie: string;
 }
 
-const FavoriteButton: FC<Props> = ({ idMovie }) => {
+export const FavoriteButton: FC<Props> = ({ idMovie }) => {
   const { mutate: mutateFavorites } = useFavorites();
-  const { user, mutate } = useCurrentUser();
+  const { user, mutate: mutateUser } = useCurrentUser();
 
+  // Verificamos si el id existe o no dentro del listado
   const isFavorite = useMemo(() => {
     const list = user?.favoriteIds || [];
 
@@ -22,6 +23,8 @@ const FavoriteButton: FC<Props> = ({ idMovie }) => {
   const toggleFavorites = useCallback(async () => {
     let response;
 
+    // Si está, la eliminamos, caso contrario la agregamos
+
     if (isFavorite) {
       response = await axios.delete(`/api/movies/favorite/${idMovie}`);
     } else {
@@ -30,12 +33,15 @@ const FavoriteButton: FC<Props> = ({ idMovie }) => {
 
     const updatedFavoriteIds = response?.data?.favoriteIds;
 
-    mutate({
+    // Actualizamos el cache con los datos nuevos del usuario, sin forzar una nueva petición
+    mutateUser({
       ...user,
       favoriteIds: updatedFavoriteIds,
     });
+
+    // Forzamos una petición
     mutateFavorites();
-  }, [idMovie, isFavorite, user, mutate, mutateFavorites]);
+  }, [idMovie, isFavorite, user, mutateUser, mutateFavorites]);
 
   const Icon = isFavorite ? AiOutlineCheck : AiOutlinePlus;
 
@@ -48,5 +54,3 @@ const FavoriteButton: FC<Props> = ({ idMovie }) => {
     </div>
   );
 };
-
-export default FavoriteButton;

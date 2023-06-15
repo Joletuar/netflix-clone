@@ -44,11 +44,13 @@ const deleteMovieFromList = async (
       message: 'USER_ID_NO_VALID',
     });
 
-  // Validamos que exista la movie
+  // Obtenemos el query params
 
   const { id: idMovie } = req.query;
 
   const isValidMovie = await Movies.findById({ _id: idMovie });
+
+  // Validamos que exista la movie
 
   if (!isValidMovie)
     return res.status(400).json({
