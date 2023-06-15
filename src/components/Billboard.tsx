@@ -33,7 +33,7 @@ export const Billboard = () => {
         src={movie?.videoUrl}
       />
 
-      <div className='absolute top-[30%] ml-4 md:top-[40%] md:ml-16'>
+      <div className='absolute top-[27%] ml-4 md:top-[40%] md:ml-16'>
         <p className='text-white text-xl md:text-5xl h-full w-1/2 lg:text-6xl font-bold drop-shadow-xl'>
           {movie?.title}
         </p>
@@ -44,7 +44,10 @@ export const Billboard = () => {
 
         <div className='flex items-center mt-3 md:mt-4 gap-3'>
           <PlayButton movieId={movie?._id!} />
-          <button className='bg-white text-white bg-opacity-30 rounded-md py-1 md:py-2 px-2 md:px-4 w-auto text-xs lg:text-lg flex gap-2 items-center hover:bg-opacity-20 transition' onClick={() => openModal(movie?._id.toString()!)}>
+          <button
+            className='bg-white text-white bg-opacity-30 rounded-md py-1 md:py-2 px-2 md:px-4 w-auto text-xs lg:text-lg flex gap-2 items-center hover:bg-opacity-20 transition'
+            onClick={() => openModal(movie?._id.toString()!)}
+          >
             <AiOutlineInfoCircle />
             Más información
           </button>
