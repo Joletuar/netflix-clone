@@ -2,6 +2,7 @@ import db from '../database';
 import bcrypt from 'bcrypt';
 
 import { Users } from '@/models';
+import { IAccount } from '@/interfaces';
 
 // verificamos si un usuario existe o no en la bd
 
@@ -16,7 +17,8 @@ export const getUser = async (emailIn: string) => {
 export const createNewUserOauth = async (
   username: string,
   email: string,
-  password: string
+  password: string,
+  account?: IAccount
 ) => {
   // Conexión a DB
 
@@ -24,11 +26,33 @@ export const createNewUserOauth = async (
 
   // Validamos que el correo no esté repetido
 
-  const userFound = await Users.findOne({ email }).lean();
+  const userFound = await Users.findOne({ email });
 
   if (userFound) {
-    // TODO: si el usuario ya se encuentra registrado verificar cuenta
+    // Obtenemos todos los providers del usuario
 
+    const listProviders = userFound.accounts?.map((provider) =>
+      provider.toString()
+    );
+
+    // Verificamos ya tiene la cuenta asociada
+
+    const existAccount = listProviders?.includes(account?._id?.toString()!);
+
+    if (existAccount) {
+      await db.Disconnect();
+      return;
+    }
+
+    // Actualizamos el listado de accounts para un mismo usuario
+
+    userFound.accounts = [
+      ...listProviders!,
+      account?._id?.toString()!,
+    ] as string[];
+
+    userFound.save();
+    await db.Disconnect();
     return;
   }
 
@@ -42,9 +66,9 @@ export const createNewUserOauth = async (
     name: username,
     image: '',
     emailVerifiedDate: new Date().toLocaleDateString(),
+    accounts: [account?._id?.toString()!],
   });
 
   await newUser.save();
-
   await db.Disconnect();
 };

@@ -1,5 +1,3 @@
-import { IAccountDB, ISessionDB } from './';
-
 export interface IUserDB {
   name: string;
   image?: string;
@@ -7,8 +5,7 @@ export interface IUserDB {
   emailVerifiedDate?: string;
   password: string;
   favoriteIds?: string[];
-  session?: ISessionDB[];
-  accounts?: IAccountDB[];
+  accounts?: string[];
 }
 
 export interface IUser {
@@ -17,6 +14,5 @@ export interface IUser {
   image?: string;
   email?: string;
   favoriteIds?: string[];
-  session?: ISessionDB[];
-  accounts?: IAccountDB[];
+  accounts?: string[];
 }

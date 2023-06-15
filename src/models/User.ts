@@ -1,5 +1,5 @@
 import { IUserDB } from '@/interfaces';
-import { Schema, model, models, Types, Model } from 'mongoose';
+import { Schema, model, models, Model } from 'mongoose';
 
 const userSchema = new Schema<IUserDB>(
   {
@@ -19,12 +19,6 @@ const userSchema = new Schema<IUserDB>(
       {
         type: Schema.Types.ObjectId,
         ref: 'Movies',
-      },
-    ],
-    session: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Sessions',
       },
     ],
     accounts: [

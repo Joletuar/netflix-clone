@@ -9,7 +9,7 @@ export const createAccount = async (account: IAccountDB) => {
   await db.Connect();
 
   try {
-    await Accounts.findOneAndUpdate(
+    return await Accounts.findOneAndUpdate(
       {
         provider: account.provider,
         providerAccountId: account.providerAccountId,

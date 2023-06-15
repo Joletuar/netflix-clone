@@ -6,7 +6,7 @@ import GoogleProvider from 'next-auth/providers/google';
 
 import { compare } from 'bcrypt';
 import { getUser, createAccount, createNewUserOauth } from '@/utils';
-import { IUser } from '@/interfaces';
+import { IAccount, IUser } from '@/interfaces';
 
 export interface CustomSession extends Session {
   access_token: string;
@@ -87,7 +87,6 @@ export const authOptions: NextAuthOptions = {
           name: userFound?.name,
           image: userFound?.image,
           favoriteIds: userFound?.favoriteIds,
-          session: userFound?.session,
           accounts: userFound?.accounts,
         };
       },
@@ -130,14 +129,6 @@ export const authOptions: NextAuthOptions = {
 
       // Cuando es oauth, creamos el usuario si no existe
 
-      if (account.type === 'oauth') {
-        await createNewUserOauth(
-          profile?.name as string,
-          profile?.email as string,
-          '@'
-        );
-      }
-
       const {
         provider,
         providerAccountId,
@@ -153,7 +144,7 @@ export const authOptions: NextAuthOptions = {
 
       // Insertamos la cuenta con la que ingreso/registro el usuario
 
-      await createAccount({
+      const newAccount = await createAccount({
         provider,
         providerAccountId,
         typeAccount,
@@ -166,6 +157,19 @@ export const authOptions: NextAuthOptions = {
         token_type,
         userId: account?.userId as string,
       });
+
+      if (account.type === 'oauth') {
+        try {
+          await createNewUserOauth(
+            profile?.name as string,
+            profile?.email as string,
+            '@',
+            newAccount
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      }
 
       return true;
     },
@@ -204,8 +208,6 @@ export const authOptions: NextAuthOptions = {
               name: userFound?.name,
               image: userFound?.image,
               favoriteIds: userFound?.favoriteIds,
-              session: userFound?.session,
-              accounts: userFound?.accounts,
             };
 
             token.user = userToken;
