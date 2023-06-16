@@ -15,12 +15,10 @@ interface Props extends IMovie {}
 
 export const MovieCard: FC<Props> = ({
   _id: id,
-  description,
   genre,
   thumbnailUrl,
   title,
   duration,
-  videoUrl,
 }) => {
   const router = useRouter();
 

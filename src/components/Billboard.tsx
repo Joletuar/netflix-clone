@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { useRouter } from 'next/router';
 
 import { useBillboard } from '@/hooks';
 
@@ -7,18 +8,31 @@ import { PlayButton } from './PlayButton';
 import { ModalContext } from '@/context';
 
 export const Billboard = () => {
+  const router = useRouter();
   const { movie, isError, isLoading } = useBillboard();
   const { openModal } = useContext(ModalContext);
 
   if (isLoading && !isError) {
-    return null;
+    return (
+      <div className='h-screen flex items-center justify-center'>
+        <p className='text-white text-3xl'>Cargando...</p>
+      </div>
+    );
   }
 
   if (!isLoading && isError) {
     return (
-      <p className='text-4xl text-white font-bold text-center'>
-        Hubo un error al cargar el contenido...
-      </p>
+      <div className='h-screen flex items-center justify-center'>
+        <p className='text-white text-3xl'>
+          Hubo un error al cargar el contenido.
+        </p>
+        <button
+          className='text-white text-xl mt-4 bg-blue-500 px-4 py-2 rounded'
+          onClick={() => router.reload()}
+        >
+          Intentar nuevamente
+        </button>
+      </div>
     );
   }
 
