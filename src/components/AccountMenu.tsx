@@ -4,12 +4,15 @@ import Image from 'next/image';
 import profile_blue from '../../public/images/default-blue.png';
 
 import { signOut } from 'next-auth/react';
+import { useCurrentUser } from '@/hooks';
 
 interface Props {
   visisble?: boolean;
 }
 
 export const AccountMenu: FC<Props> = ({ visisble }) => {
+  const { user } = useCurrentUser();
+
   if (!visisble) {
     return null;
   }
@@ -24,7 +27,7 @@ export const AccountMenu: FC<Props> = ({ visisble }) => {
             alt='blue profile image'
           />
           <p className='text-white text-sm group-hover/item:underline'>
-            UserName
+            {user?.name}
           </p>
         </div>
 
