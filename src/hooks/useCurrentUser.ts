@@ -5,7 +5,7 @@ import { IUser } from '@/interfaces';
 // hook que permite obtener la info de un user usando swr
 
 export const useCurrentUser = () => {
-  const { data, error, isLoading, mutate } = useSWR<IUser>(
+  const { data, error, isLoading, mutate } = useSWR(
     '/api/user/current',
     fetcherAxios
   );
