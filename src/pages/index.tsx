@@ -1,9 +1,10 @@
 import { useContext } from 'react';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 import { Billboard, InfoModal, MovieList, Navbar } from '@/components';
 import { useFavorites, useMovies } from '@/hooks';
 import { ModalContext } from '@/context';
-import { useRouter } from 'next/router';
 
 const Home = () => {
   const router = useRouter();
@@ -37,6 +38,9 @@ const Home = () => {
 
   return (
     <>
+      <Head>
+        <title>NetflixClone - Home</title>
+      </Head>
       {isOpen && <InfoModal />}
 
       <Navbar />

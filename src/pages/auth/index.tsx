@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import Image from 'next/image';
+import Head from 'next/head';
 
 import logo from '../../../public/images/logo.png';
 import { Input } from '@/components';
@@ -56,103 +57,109 @@ const AuthHome = () => {
   return (
     // Main container with de image background
 
-    <div className="relative h-full w-full bg-[url('../../public/images/hero.jpg')] bg-cover bg-no-repeat bg-center bg-fixed">
-      <div className='w-full h-full lg:bg-opacity-50 bg-black'>
-        <nav className='px-12 py-5'>
-          <Image className='h-12 w-fit' src={logo} alt='Logo' priority />
-        </nav>
+    <>
+      <Head>
+        <title>NetflixClone - Auth</title>
+      </Head>
 
-        {/* Login and Register */}
+      <div className="relative h-full w-full bg-[url('../../public/images/hero.jpg')] bg-cover bg-no-repeat bg-center bg-fixed">
+        <div className='w-full h-full lg:bg-opacity-50 bg-black'>
+          <nav className='px-12 py-5'>
+            <Image className='h-12 w-fit' src={logo} alt='Logo' priority />
+          </nav>
 
-        <div className='flex justify-center'>
-          <div className='bg-black p-16 self-center mt-2 lg:w-2/5 lg:max-w-md w-full rounded-md'>
-            <h2 className='text-white text-4xl font-semibold mb-10'>
-              {variant === 'login' ? 'Ingresar' : 'Crear una cuenta'}
-            </h2>
+          {/* Login and Register */}
 
-            {/* Container of inputs */}
+          <div className='flex justify-center'>
+            <div className='bg-black p-16 self-center mt-2 lg:w-2/5 lg:max-w-md w-full rounded-md'>
+              <h2 className='text-white text-4xl font-semibold mb-10'>
+                {variant === 'login' ? 'Ingresar' : 'Crear una cuenta'}
+              </h2>
 
-            <div className='flex flex-col gap-4'>
-              {variant === 'register' && (
+              {/* Container of inputs */}
+
+              <div className='flex flex-col gap-4'>
+                {variant === 'register' && (
+                  <Input
+                    id={'username'}
+                    onChange={(e: any) => setUsername(e.target.value)}
+                    value={username}
+                    label={'username'}
+                    type='text'
+                  />
+                )}
+
                 <Input
-                  id={'username'}
-                  onChange={(e: any) => setUsername(e.target.value)}
-                  value={username}
-                  label={'username'}
-                  type='text'
+                  id={'email'}
+                  onChange={(e: any) => setEmail(e.target.value)}
+                  value={email}
+                  label={'email'}
+                  type='email'
                 />
-              )}
 
-              <Input
-                id={'email'}
-                onChange={(e: any) => setEmail(e.target.value)}
-                value={email}
-                label={'email'}
-                type='email'
-              />
-
-              <Input
-                id={'password'}
-                onChange={(e: any) => setPassword(e.target.value)}
-                value={password}
-                label={'password'}
-                type='password'
-              />
-            </div>
-
-            {/* Register and Login button */}
-
-            <button
-              className='bg-red-600 py-3 text-white rounded-md block w-full mt-10 hover:bg-red-700 transition'
-              onClick={variant === 'login' ? handleLogin : handleRegister}
-            >
-              {variant === 'login' ? 'Ingresar' : 'Crear cuenta'}
-            </button>
-
-            {/* Providers icons */}
-
-            <div className='flex items-center justify-center gap-4 mt-8'>
-              <div
-                className='w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition'
-                onClick={() =>
-                  signIn('google', {
-                    callbackUrl: '/profiles',
-                  })
-                }
-              >
-                <FcGoogle size={30} />
+                <Input
+                  id={'password'}
+                  onChange={(e: any) => setPassword(e.target.value)}
+                  value={password}
+                  label={'password'}
+                  type='password'
+                />
               </div>
 
-              <div
-                className='w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition'
-                onClick={() =>
-                  signIn('github', {
-                    callbackUrl: '/profiles',
-                  })
-                }
+              {/* Register and Login button */}
+
+              <button
+                className='bg-red-600 py-3 text-white rounded-md block w-full mt-10 hover:bg-red-700 transition'
+                onClick={variant === 'login' ? handleLogin : handleRegister}
               >
-                <FaGithub size={30} />
+                {variant === 'login' ? 'Ingresar' : 'Crear cuenta'}
+              </button>
+
+              {/* Providers icons */}
+
+              <div className='flex items-center justify-center gap-4 mt-8'>
+                <div
+                  className='w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition'
+                  onClick={() =>
+                    signIn('google', {
+                      callbackUrl: '/profiles',
+                    })
+                  }
+                >
+                  <FcGoogle size={30} />
+                </div>
+
+                <div
+                  className='w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition'
+                  onClick={() =>
+                    signIn('github', {
+                      callbackUrl: '/profiles',
+                    })
+                  }
+                >
+                  <FaGithub size={30} />
+                </div>
               </div>
+
+              {/* Helper text */}
+
+              <p className='text-neutral-500 mt-8 text-end'>
+                {variant === 'login'
+                  ? '¿No tienes cuenta?'
+                  : '¿Ya tienes cuenta?'}
+
+                <span
+                  onClick={toggleVariant}
+                  className='text-white ml-1 hover:underline cursor-pointer'
+                >
+                  {variant === 'login' ? 'Crear una cuenta' : 'Ingresar'}
+                </span>
+              </p>
             </div>
-
-            {/* Helper text */}
-
-            <p className='text-neutral-500 mt-8 text-end'>
-              {variant === 'login'
-                ? '¿No tienes cuenta?'
-                : '¿Ya tienes cuenta?'}
-
-              <span
-                onClick={toggleVariant}
-                className='text-white ml-1 hover:underline cursor-pointer'
-              >
-                {variant === 'login' ? 'Crear una cuenta' : 'Ingresar'}
-              </span>
-            </p>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 import { useMovie } from '@/hooks';
 
@@ -36,25 +37,30 @@ const WatchHome = () => {
   }
 
   return (
-    <div className='h-screen w-screen bg-black'>
-      <nav className='fixed w-full p-4 z-10 flex items-center gap-8 bg-black bg-opacity-70'>
-        <AiOutlineArrowLeft
-          className='text-white cursor-pointer'
-          size={40}
-          onClick={() => router.back()}
+    <>
+      <Head>
+        <title>NetflixClone - {movie?.title}</title>
+      </Head>
+      <div className='h-screen w-screen bg-black'>
+        <nav className='fixed w-full p-4 z-10 flex items-center gap-8 bg-black bg-opacity-70'>
+          <AiOutlineArrowLeft
+            className='text-white cursor-pointer'
+            size={40}
+            onClick={() => router.back()}
+          />
+          <p className='text-white text-xl md:text-3xl font-bold'>
+            <span className='font-light'>Viendo: </span>
+            {movie?.title}
+          </p>
+        </nav>
+        <video
+          className='w-full h-full object-cover'
+          controls
+          poster={movie?.thumbnailUrl}
+          src={movie?.videoUrl}
         />
-        <p className='text-white text-xl md:text-3xl font-bold'>
-          <span className='font-light'>Viendo: </span>
-          {movie?.title}
-        </p>
-      </nav>
-      <video
-        className='w-full h-full object-cover'
-        controls
-        poster={movie?.thumbnailUrl}
-        src={movie?.videoUrl}
-      />
-    </div>
+      </div>
+    </>
   );
 };
 
