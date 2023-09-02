@@ -30,7 +30,7 @@ const getRandomMovie = async (
   // Validamos si existe una sessión
   await verifySession(req, res);
 
-  db.Connect();
+  await db.Connect();
 
   // Obtenemos el numero total de movies en la db
   const movieCount = await Movies.estimatedDocumentCount();
@@ -46,7 +46,7 @@ const getRandomMovie = async (
     .lean()
     .exec();
 
-  db.Disconnect();
+  await db.Disconnect();
 
   return res.status(200).json(movieRandom[0]);
 };

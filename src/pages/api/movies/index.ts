@@ -30,12 +30,12 @@ const getMovies = async (
   // Validamos si existe una sessión
   await verifySession(req, res);
 
-  db.Connect();
+  await db.Connect();
 
   // Obtenemos todas las movies
   const movies = await Movies.find();
 
-  db.Disconnect();
+  await db.Disconnect();
 
   return res.status(200).json(movies);
 };

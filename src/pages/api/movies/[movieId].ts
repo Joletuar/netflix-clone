@@ -30,7 +30,7 @@ const getMovie = async (
   // Validamos si existe una sessión
   await verifySession(req, res);
 
-  db.Connect();
+  await db.Connect();
 
   // Obtenemos el id de la movie de la query url
 
@@ -48,7 +48,7 @@ const getMovie = async (
       message: 'MOVIE_NOT_FOUND',
     });
 
-  db.Disconnect();
+  await db.Disconnect();
 
   return res.status(200).json(movieFound);
 };

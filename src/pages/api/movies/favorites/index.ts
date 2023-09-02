@@ -30,6 +30,8 @@ const getFavoritesMoviesList = async (
   // Validamos si existe una sessión
   const session = await verifySession(req, res);
 
+  await db.Connect();
+
   // Obtenemos el usuario
   const user = session?.user;
 
@@ -40,7 +42,7 @@ const getFavoritesMoviesList = async (
     .select('-_id favoriteIds')
     .lean();
 
-  db.Disconnect();
+  await db.Disconnect();
 
   return res.status(200).json((favoritesMoviesList!.favoriteIds as []) ?? []);
 };
