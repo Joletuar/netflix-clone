@@ -35,7 +35,7 @@ const addMovieToList = async (
   // Obtenemos el usuario
   const user = session?.user;
 
-  db.Connect();
+  await db.Connect();
 
   // Validamos que exista el usuario
 
@@ -61,7 +61,7 @@ const addMovieToList = async (
 
   const updatedUser = await isValidUser.save();
 
-  db.Disconnect();
+  await db.Disconnect();
 
   return res.status(200).json(updatedUser);
 };

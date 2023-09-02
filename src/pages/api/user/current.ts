@@ -35,11 +35,11 @@ const getUser = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
 
   // Obtenemos el user
 
-  db.Connect();
+  await db.Connect();
 
   const userFond = await Users.findById(session?.user?.id);
 
-  db.Disconnect();
+  await db.Disconnect();
 
   if (!userFond) {
     return res.status(401).json({

@@ -6,7 +6,7 @@ import GoogleProvider from 'next-auth/providers/google';
 
 import { compare } from 'bcrypt';
 import { getUser, createAccount, createNewUserOauth } from '@/utils';
-import { IAccount, IUser } from '@/interfaces';
+import { IUser } from '@/interfaces';
 
 export interface CustomSession extends Session {
   access_token: string;
